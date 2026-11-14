@@ -1,0 +1,18 @@
+[Unit]
+Description=Kraken Elite V2 live temperature dashboard
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Documents/reversing/kraken360
+ExecStart=%h/.local/bin/kraken360 run --interval 1 --primary gpu --font artifacts/cam-resources/embedded-fonts/Gotham-Bold-01e0ebe6.otf
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+NoNewPrivileges=true
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kraken360
+
+[Install]
+WantedBy=default.target
