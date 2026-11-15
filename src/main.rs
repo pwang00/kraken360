@@ -1,9 +1,9 @@
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use clap::{Parser, Subcommand, ValueEnum};
 use fs2::FileExt;
 use kraken360::{
     protocol::{Format, Lcd},
-    render::{DashboardRenderer, Primary},
+    render::{DashboardRenderer, Layout, Primary},
     sensors,
     usb::UsbTransport,
 };
@@ -11,8 +11,8 @@ use std::{
     fs::{self, OpenOptions},
     path::PathBuf,
     sync::{
-        atomic::{AtomicBool, Ordering},
         Arc,
+        atomic::{AtomicBool, Ordering},
     },
     thread,
     time::{Duration, Instant},
@@ -64,8 +64,12 @@ struct Options {
     cpu_sensor: Option<PathBuf>,
     #[arg(long, default_value_t = 0)]
     gpu_index: u32,
-    #[arg(long, value_enum, default_value = "gpu")]
-    primary: MainReading,
+    /// Large, upper-right, lower-right: g=GPU, c=CPU, l=Liquid. Default: gcl.
+    #[arg(long, conflicts_with = "primary")]
+    layout: Option<Layout>,
+    /// Compatibility option: gpu = gcl, cpu = cgl. Prefer --layout.
+    #[arg(long, value_enum, conflicts_with = "layout")]
+    primary: Option<MainReading>,
     /// System font by default; a locally extracted CAM OTF can also be selected.
     #[arg(
         long,
@@ -132,11 +136,11 @@ fn main() -> Result<()> {
                 Some(p) => p,
                 None => sensors::cpu_sensor(std::path::Path::new("/sys/class/hwmon"))?,
             };
-            let primary = match options.primary {
-                MainReading::Cpu => Primary::Cpu,
-                MainReading::Gpu => Primary::Gpu,
-            };
-            let renderer = DashboardRenderer::new(&options.font, primary)?;
+            let layout = options.layout.unwrap_or_else(|| match options.primary {
+                Some(MainReading::Cpu) => Primary::Cpu.into(),
+                Some(MainReading::Gpu) | None => Layout::default(),
+            });
+            let renderer = DashboardRenderer::with_layout(&options.font, layout)?;
             parent(&options.output)?;
             eprintln!(
                 "CPU sensor: {}; NVIDIA GPU index: {}",
@@ -183,4 +187,35 @@ fn main() -> Result<()> {
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn layout_cli_accepts_all_permutations_for_run_and_preview() {
+        for subcommand in ["run", "preview"] {
+            for layout in ["gcl", "glc", "cgl", "clg", "lgc", "lcg"] {
+                let args =
+                    Args::try_parse_from(["kraken360", subcommand, "--layout", layout]).unwrap();
+                let options = match args.command {
+                    Command::Run { options, .. } | Command::Preview { options } => options,
+                    _ => unreachable!(),
+                };
+                assert_eq!(options.layout.unwrap().to_string(), layout);
+            }
+        }
+    }
+
+    #[test]
+    fn ambiguous_and_invalid_layouts_fail_before_device_access() {
+        for args in [
+            vec!["kraken360", "run", "--layout", "gcc"],
+            vec!["kraken360", "run", "--layout", "clg", "--primary", "gpu"],
+        ] {
+            assert!(Args::try_parse_from(args).is_err());
+        }
+        assert!(Args::try_parse_from(["kraken360", "run", "--primary", "cpu"]).is_ok());
+    }
 }

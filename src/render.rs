@@ -5,7 +5,67 @@ use crate::{
 use anyhow::{Context, Result};
 use fontdue::{Font, FontSettings};
 use image::{Rgb, RgbImage};
-use std::{f32::consts::PI, fs, path::Path};
+use std::{f32::consts::PI, fmt, fs, path::Path, str::FromStr};
+
+/// Order of the large, upper-right, and lower-right temperature slots.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Layout {
+    #[default]
+    Gcl,
+    Glc,
+    Cgl,
+    Clg,
+    Lgc,
+    Lcg,
+}
+
+impl FromStr for Layout {
+    type Err = String;
+
+    fn from_str(value: &str) -> std::result::Result<Self, Self::Err> {
+        match value {
+            "gcl" => Ok(Self::Gcl),
+            "glc" => Ok(Self::Glc),
+            "cgl" => Ok(Self::Cgl),
+            "clg" => Ok(Self::Clg),
+            "lgc" => Ok(Self::Lgc),
+            "lcg" => Ok(Self::Lcg),
+            _ => {
+                Err("expected one of gcl, glc, cgl, clg, lgc, lcg (g=GPU, c=CPU, l=Liquid)".into())
+            }
+        }
+    }
+}
+
+impl fmt::Display for Layout {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Self::Gcl => "gcl",
+            Self::Glc => "glc",
+            Self::Cgl => "cgl",
+            Self::Clg => "clg",
+            Self::Lgc => "lgc",
+            Self::Lcg => "lcg",
+        })
+    }
+}
+
+impl Layout {
+    /// Values and their labels travel together; missing readings retain their slot.
+    pub fn readings(self, t: Temperatures) -> [(Option<f32>, &'static str); 3] {
+        let cpu = (t.cpu, "CPU");
+        let gpu = (t.gpu, "GPU");
+        let liquid = (t.liquid, "Liquid");
+        match self {
+            Self::Gcl => [gpu, cpu, liquid],
+            Self::Glc => [gpu, liquid, cpu],
+            Self::Cgl => [cpu, gpu, liquid],
+            Self::Clg => [cpu, liquid, gpu],
+            Self::Lgc => [liquid, gpu, cpu],
+            Self::Lcg => [liquid, cpu, gpu],
+        }
+    }
+}
 
 #[derive(Clone, Copy, Debug, Default)]
 pub enum Primary {
@@ -14,18 +74,32 @@ pub enum Primary {
     Gpu,
 }
 
+impl From<Primary> for Layout {
+    fn from(primary: Primary) -> Self {
+        match primary {
+            Primary::Cpu => Self::Cgl,
+            Primary::Gpu => Self::Gcl,
+        }
+    }
+}
+
 /// CPU rasterizer. CAM assets/shaders are not needed or embedded.
 pub struct DashboardRenderer {
     font: Font,
-    pub primary: Primary,
+    pub layout: Layout,
 }
 impl DashboardRenderer {
     pub fn new(font: &Path, primary: Primary) -> Result<Self> {
+        Self::with_layout(font, primary.into())
+    }
+
+    pub fn with_layout(font: &Path, layout: Layout) -> Result<Self> {
         let bytes = fs::read(font).with_context(|| format!("Read font {}", font.display()))?;
         let font = Font::from_bytes(bytes, FontSettings::default())
             .map_err(|e| anyhow::anyhow!("Parse font: {e}"))?;
-        Ok(Self { font, primary })
+        Ok(Self { font, layout })
     }
+
     fn text(&self, image: &mut RgbImage, text: &str, size: f32, cx: f32, cy: f32) {
         let mut glyphs = vec![];
         let (mut advance, mut previous) = (0., None);
@@ -64,11 +138,13 @@ impl DashboardRenderer {
             }
         }
     }
+
     pub fn render(&self, t: Temperatures) -> RgbImage {
-        let (main, secondary, main_label, secondary_label) = match self.primary {
-            Primary::Cpu => (t.cpu, t.gpu, "CPU", "GPU"),
-            Primary::Gpu => (t.gpu, t.cpu, "GPU", "CPU"),
-        };
+        let [
+            (main, main_label),
+            (secondary, secondary_label),
+            (bottom, bottom_label),
+        ] = self.layout.readings(t);
         let reading = main
             .filter(|v| v.is_finite())
             .map(|v| (v / 100.).clamp(0., 1.));
@@ -135,17 +211,12 @@ impl DashboardRenderer {
             270.,
         );
         self.text(&mut image, secondary_label, 23., 480., 313.);
-        self.text(
-            &mut image,
-            &format!("{}°", number(t.liquid)),
-            64.,
-            490.,
-            383.,
-        );
-        self.text(&mut image, "Liquid", 23., 480., 427.);
+        self.text(&mut image, &format!("{}°", number(bottom)), 64., 490., 383.);
+        self.text(&mut image, bottom_label, 23., 480., 427.);
         image
     }
 }
+
 fn gradient(t: f32) -> [f32; 3] {
     let stops = [[255., 185., 0.], [255., 127., 183.], [120., 0., 150.]];
     let (a, b, u) = if t < 0.6 {

@@ -51,6 +51,7 @@ impl Transport for UsbTransport {
             self.handle.write_interrupt(endpoint, data, timeout)?
         })
     }
+
     fn read(&mut self, timeout: Duration) -> Result<Vec<u8>> {
         let mut report = vec![0; 512];
         match self.handle.read_interrupt(0x81, &mut report, timeout) {

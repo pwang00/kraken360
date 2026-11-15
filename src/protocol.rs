@@ -21,6 +21,7 @@ impl Format {
             Self::Q565 => 8,
         }
     }
+
     pub fn validate(self, data: &[u8]) -> Result<()> {
         match self {
             Self::Rgb888 => ensure!(
@@ -66,6 +67,7 @@ pub fn coolant_report(report: &[u8]) -> Option<f32> {
 /// USB transfer boundary abstraction, also usable for recorded/mock transports.
 pub trait Transport {
     fn write(&mut self, endpoint: u8, data: &[u8]) -> Result<usize>;
+
     /// Empty report means a bounded read timeout, not device disconnection.
     fn read(&mut self, timeout: Duration) -> Result<Vec<u8>>;
 }
@@ -124,7 +126,7 @@ impl<T: Transport> Lcd<T> {
         self.write(2, data)?;
         self.command(&[0x36, 2], [0x37, 2])
     }
-    
+
     /// Listen to unsolicited status reports, without changing device settings.
     pub fn coolant(&mut self) -> Result<Option<f32>> {
         let deadline = Instant::now() + Duration::from_millis(1200);

@@ -5,7 +5,7 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 WorkingDirectory=%h/Documents/reversing/kraken360
-ExecStart=%h/.local/bin/kraken360 run --interval 1 --primary gpu --font artifacts/cam-resources/embedded-fonts/Gotham-Bold-01e0ebe6.otf
+ExecStart=%h/.local/bin/kraken360 run --interval 1 --layout gcl --font artifacts/cam-resources/embedded-fonts/Gotham-Bold-01e0ebe6.otf
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=15
