@@ -1,0 +1,22 @@
+[
+  {
+    "file": "captures/june/export.pcapng",
+    "bytes": 730484,
+    "sha256": "4c436137508cfb1af5d7660f1d5996d20977ece000355700f4d000a8992a4e13"
+  },
+  {
+    "file": "captures/windows/cam-frames.pcap",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "captures/windows/cam-frames.pcapng",
+    "bytes": 18540936,
+    "sha256": "cb1157ea11409c2fcc1a17b118de4fa251a60db5de95500d9b608156257d6485"
+  },
+  {
+    "file": "captures/windows/cam-live.pcap",
+    "bytes": 521250,
+    "sha256": "587373bfff84a563ed712fccc769f19eec0cec03d8878da8251b0659892bde80"
+  }
+]

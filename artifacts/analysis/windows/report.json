@@ -1,0 +1,719 @@
+{
+  "capture": {
+    "packets": 396,
+    "duration": 14.854323148727417,
+    "truncated_packets": 0,
+    "frames": [
+      {
+        "index": 0,
+        "packet": 27,
+        "time": 1794644648.229633,
+        "sha256": "d565effe521ed1e46c043a0ca8c299e91d3988ce95ee12fd9f6447c890a0c8d2"
+      },
+      {
+        "index": 1,
+        "packet": 49,
+        "time": 1794644649.227655,
+        "sha256": "697a02d5ed35c75aaa889dfb2c363e98d9f807eb96658ab72e00c7556bf85822"
+      },
+      {
+        "index": 2,
+        "packet": 75,
+        "time": 1794644650.227679,
+        "sha256": "58c0fdcfe3ccf5491cf24e1c4570fe2550172c0028750b8ac6598d2fb47aa976"
+      },
+      {
+        "index": 3,
+        "packet": 101,
+        "time": 1794644651.227755,
+        "sha256": "58c0fdcfe3ccf5491cf24e1c4570fe2550172c0028750b8ac6598d2fb47aa976"
+      },
+      {
+        "index": 4,
+        "packet": 127,
+        "time": 1794644652.228745,
+        "sha256": "e5fda5254f546d7ace89158570a4be2dd56ff86b390862d1fd521a13ff22b833"
+      },
+      {
+        "index": 5,
+        "packet": 157,
+        "time": 1794644653.230737,
+        "sha256": "d6efe224216a989a8222f433719f61a5da9f9af67c9991c38b6f70317797e27d"
+      },
+      {
+        "index": 6,
+        "packet": 183,
+        "time": 1794644654.230709,
+        "sha256": "03bb3a30c856d32da6e59edd9be6e38f2c4e406f298b9a7979270f5615fe71a4"
+      },
+      {
+        "index": 7,
+        "packet": 209,
+        "time": 1794644655.231784,
+        "sha256": "03bb3a30c856d32da6e59edd9be6e38f2c4e406f298b9a7979270f5615fe71a4"
+      },
+      {
+        "index": 8,
+        "packet": 231,
+        "time": 1794644656.22979,
+        "sha256": "05c97329a815e9fabf197318c5677b40be81273a40c3c51c9bcc13d547745551"
+      },
+      {
+        "index": 9,
+        "packet": 257,
+        "time": 1794644657.229786,
+        "sha256": "a04d74a7b24bb1155388ca6bad856432eb43f69552e3277ddedff13a4ce094bf"
+      },
+      {
+        "index": 10,
+        "packet": 283,
+        "time": 1794644658.229806,
+        "sha256": "05c97329a815e9fabf197318c5677b40be81273a40c3c51c9bcc13d547745551"
+      },
+      {
+        "index": 11,
+        "packet": 309,
+        "time": 1794644659.229876,
+        "sha256": "05c97329a815e9fabf197318c5677b40be81273a40c3c51c9bcc13d547745551"
+      },
+      {
+        "index": 12,
+        "packet": 339,
+        "time": 1794644660.232748,
+        "sha256": "ce8b1e68ff66adc662f7d514f45643bc6a91c0bf34c2ddf91481e1029a2843fc"
+      },
+      {
+        "index": 13,
+        "packet": 361,
+        "time": 1794644661.230762,
+        "sha256": "cef5b658665f5444ef64a8cfc5c77762d984c1db3af91dbddc37a5e99d64b5f1"
+      },
+      {
+        "index": 14,
+        "packet": 387,
+        "time": 1794644662.230912,
+        "sha256": "d980bc0966761f7a215301c492e0aae7c5649c0e955191f1056b433a55d4cf04"
+      }
+    ],
+    "frame_intervals_seconds": [
+      0.9980218410491943,
+      1.0000240802764893,
+      1.0000760555267334,
+      1.0009899139404297,
+      1.0019919872283936,
+      0.9999721050262451,
+      1.001075029373169,
+      0.9980058670043945,
+      0.9999959468841553,
+      1.0000200271606445,
+      1.0000700950622559,
+      1.0028719902038574,
+      0.998013973236084,
+      1.0001499652862549
+    ],
+    "unique_bulk_headers": [
+      "12 fa 01 e8 ab cd ef 98 76 54 32 10 09 00 00 00 00 c0 12 00"
+    ],
+    "unique_frames": 11,
+    "changed_pixels": 12148,
+    "strongly_changed_pixels": 11526,
+    "changed_row_spans": [
+      [
+        3,
+        63
+      ],
+      [
+        67,
+        69
+      ],
+      [
+        71,
+        74
+      ],
+      [
+        75,
+        76
+      ],
+      [
+        78,
+        81
+      ],
+      [
+        82,
+        83
+      ],
+      [
+        84,
+        85
+      ],
+      [
+        86,
+        88
+      ],
+      [
+        89,
+        91
+      ],
+      [
+        95,
+        98
+      ],
+      [
+        101,
+        102
+      ],
+      [
+        108,
+        113
+      ],
+      [
+        117,
+        119
+      ],
+      [
+        121,
+        122
+      ],
+      [
+        124,
+        126
+      ],
+      [
+        127,
+        128
+      ],
+      [
+        129,
+        131
+      ],
+      [
+        132,
+        134
+      ],
+      [
+        135,
+        136
+      ],
+      [
+        137,
+        138
+      ],
+      [
+        142,
+        143
+      ],
+      [
+        144,
+        146
+      ],
+      [
+        147,
+        151
+      ],
+      [
+        153,
+        155
+      ],
+      [
+        160,
+        162
+      ],
+      [
+        164,
+        165
+      ],
+      [
+        168,
+        170
+      ],
+      [
+        176,
+        177
+      ],
+      [
+        179,
+        180
+      ],
+      [
+        181,
+        184
+      ],
+      [
+        185,
+        186
+      ],
+      [
+        190,
+        191
+      ],
+      [
+        193,
+        194
+      ],
+      [
+        195,
+        196
+      ],
+      [
+        197,
+        198
+      ],
+      [
+        202,
+        204
+      ],
+      [
+        207,
+        209
+      ],
+      [
+        210,
+        211
+      ],
+      [
+        212,
+        214
+      ],
+      [
+        219,
+        220
+      ],
+      [
+        221,
+        224
+      ],
+      [
+        228,
+        232
+      ],
+      [
+        233,
+        235
+      ],
+      [
+        237,
+        239
+      ],
+      [
+        241,
+        384
+      ],
+      [
+        385,
+        386
+      ],
+      [
+        388,
+        391
+      ],
+      [
+        393,
+        395
+      ],
+      [
+        399,
+        400
+      ],
+      [
+        401,
+        402
+      ],
+      [
+        405,
+        406
+      ],
+      [
+        408,
+        409
+      ],
+      [
+        412,
+        413
+      ],
+      [
+        417,
+        418
+      ],
+      [
+        420,
+        422
+      ],
+      [
+        425,
+        426
+      ],
+      [
+        427,
+        428
+      ],
+      [
+        430,
+        432
+      ],
+      [
+        437,
+        438
+      ],
+      [
+        440,
+        441
+      ],
+      [
+        442,
+        443
+      ],
+      [
+        444,
+        445
+      ],
+      [
+        446,
+        448
+      ],
+      [
+        450,
+        451
+      ],
+      [
+        456,
+        459
+      ],
+      [
+        460,
+        461
+      ],
+      [
+        463,
+        466
+      ],
+      [
+        469,
+        470
+      ],
+      [
+        472,
+        473
+      ],
+      [
+        475,
+        476
+      ],
+      [
+        479,
+        481
+      ],
+      [
+        483,
+        484
+      ],
+      [
+        485,
+        486
+      ],
+      [
+        489,
+        491
+      ],
+      [
+        492,
+        493
+      ],
+      [
+        495,
+        496
+      ],
+      [
+        498,
+        499
+      ],
+      [
+        502,
+        504
+      ],
+      [
+        506,
+        508
+      ],
+      [
+        509,
+        510
+      ],
+      [
+        512,
+        513
+      ],
+      [
+        514,
+        515
+      ],
+      [
+        518,
+        519
+      ],
+      [
+        530,
+        531
+      ]
+    ],
+    "regions": {
+      "logo": {
+        "box": [
+          250,
+          120,
+          390,
+          170
+        ],
+        "changed_pixels": 0,
+        "distinct_rasters": 1
+      },
+      "main_cpu_digits": {
+        "box": [
+          100,
+          235,
+          350,
+          390
+        ],
+        "changed_pixels": 7329,
+        "distinct_rasters": 3
+      },
+      "gpu_digits": {
+        "box": [
+          440,
+          235,
+          525,
+          300
+        ],
+        "changed_pixels": 894,
+        "distinct_rasters": 2
+      },
+      "liquid_digits": {
+        "box": [
+          440,
+          350,
+          525,
+          410
+        ],
+        "changed_pixels": 0,
+        "distinct_rasters": 1
+      },
+      "cpu_label": {
+        "box": [
+          190,
+          405,
+          270,
+          445
+        ],
+        "changed_pixels": 0,
+        "distinct_rasters": 1
+      },
+      "gpu_label": {
+        "box": [
+          440,
+          300,
+          505,
+          325
+        ],
+        "changed_pixels": 0,
+        "distinct_rasters": 1
+      },
+      "liquid_label": {
+        "box": [
+          440,
+          415,
+          525,
+          440
+        ],
+        "changed_pixels": 0,
+        "distinct_rasters": 1
+      },
+      "divider": {
+        "box": [
+          408,
+          240,
+          412,
+          433
+        ],
+        "changed_pixels": 0,
+        "distinct_rasters": 1
+      }
+    },
+    "note": "Invariant pixels apply only to these samples, not all temperatures or configurations."
+  },
+  "executable": {
+    "size": 186398128,
+    "sha256": "cb8c612c674147f7ba5b8620ce69788e266dc2ddd368836473656e0e513d8740",
+    "sections": [
+      {
+        "name": ".text",
+        "offset": 1536,
+        "size": 153632256,
+        "rva": 4096,
+        "virtual_size": 153631875
+      },
+      {
+        "name": ".rdata",
+        "offset": 153633792,
+        "size": 26160640,
+        "rva": 153636864,
+        "virtual_size": 26160240
+      },
+      {
+        "name": ".data",
+        "offset": 179794432,
+        "size": 691712,
+        "rva": 179798016,
+        "virtual_size": 4778448
+      },
+      {
+        "name": ".pdata",
+        "offset": 180486144,
+        "size": 4792832,
+        "rva": 184578048,
+        "virtual_size": 4792332
+      },
+      {
+        "name": ".gxfg",
+        "offset": 185278976,
+        "size": 17408,
+        "rva": 189374464,
+        "virtual_size": 17120
+      },
+      {
+        "name": ".retplne",
+        "offset": 185296384,
+        "size": 512,
+        "rva": 189394944,
+        "virtual_size": 240
+      },
+      {
+        "name": ".rodata",
+        "offset": 185296896,
+        "size": 4608,
+        "rva": 189399040,
+        "virtual_size": 4576
+      },
+      {
+        "name": ".tls",
+        "offset": 185301504,
+        "size": 1536,
+        "rva": 189407232,
+        "virtual_size": 1505
+      },
+      {
+        "name": "CPADinfo",
+        "offset": 185303040,
+        "size": 512,
+        "rva": 189411328,
+        "virtual_size": 56
+      },
+      {
+        "name": "LZMADEC",
+        "offset": 185303552,
+        "size": 4608,
+        "rva": 189415424,
+        "virtual_size": 4593
+      },
+      {
+        "name": "_RDATA",
+        "offset": 185308160,
+        "size": 512,
+        "rva": 189423616,
+        "virtual_size": 500
+      },
+      {
+        "name": "malloc_h",
+        "offset": 185308672,
+        "size": 512,
+        "rva": 189427712,
+        "virtual_size": 228
+      },
+      {
+        "name": "prot",
+        "offset": 185309184,
+        "size": 512,
+        "rva": 189431808,
+        "virtual_size": 147
+      },
+      {
+        "name": ".rsrc",
+        "offset": 185309696,
+        "size": 84992,
+        "rva": 189435904,
+        "virtual_size": 84784
+      },
+      {
+        "name": ".reloc",
+        "offset": 185394688,
+        "size": 992768,
+        "rva": 189521920,
+        "virtual_size": 992768
+      }
+    ],
+    "trailing_bytes_after_sections": 10672,
+    "string_evidence": {
+      "Electron v32.1.0": {
+        "count": 1,
+        "first_offsets": [
+          "0x954b112"
+        ]
+      },
+      "app.asar": {
+        "count": 5,
+        "first_offsets": [
+          "0x3c3787",
+          "0x955aa04",
+          "0x955aa15",
+          "0xa564966",
+          "0xa56497a"
+        ]
+      },
+      "vulkan-1.dll": {
+        "count": 1,
+        "first_offsets": [
+          "0x97966ac"
+        ]
+      },
+      "vkCreateInstance": {
+        "count": 3,
+        "first_offsets": [
+          "0x9761b9f",
+          "0x97e81c0",
+          "0xa8aecd0"
+        ]
+      },
+      "Kraken": {
+        "count": 0,
+        "first_offsets": []
+      },
+      "kraken": {
+        "count": 0,
+        "first_offsets": []
+      },
+      "Q565": {
+        "count": 0,
+        "first_offsets": []
+      },
+      "q565": {
+        "count": 0,
+        "first_offsets": []
+      },
+      "{\"files\":": {
+        "count": 0,
+        "first_offsets": []
+      }
+    },
+    "validated_pngs": [
+      {
+        "offset": "0xb0cc564",
+        "size": 5442,
+        "dimensions": [
+          256,
+          256
+        ],
+        "file": "exe-png-0b0cc564.png"
+      }
+    ],
+    "plausible_spirv_headers": [],
+    "note": "Runtime Vulkan strings and even embedded shaders would not identify the LCD renderer. No executable code was run."
+  }
+}

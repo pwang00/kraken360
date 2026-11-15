@@ -1,0 +1,68 @@
+[
+  {
+    "file": "renderer.js",
+    "character_offset": 482522,
+    "token": "forcedGraphicsApi:{",
+    "excerpt": "equestHighPerformance:{type:\"boolean\",default:!1},forcedGraphicsApi:{type:\"string\",default:i.ForcedGraphicsApi.Vulkan},backupInstanceId:{type:\"string\",default:(0,g.Z)()},disableHardwareAcceleration:{type:\"boolean\",default:!1},forc"
+  },
+  {
+    "file": "170.bundle.js",
+    "character_offset": 241732,
+    "token": "function parseForcedGraphicsApi",
+    "excerpt": "function parseForcedGraphicsApi(e,t=K.ForcedGraphicsApi.Vulkan){const o=Object.keys(K.ForcedGraphicsApi);for(const t of o)if(K.ForcedGraphicsApi[t].toLowerCase()===e.toLowerCase())return K.ForcedGraphicsApi[t];return t}class Client{constructor(e){if(Client.instance)return Client.instance;const t=(0,V.X)(),o=(0,_.BN)(),i=(0,_.DW)(\"userData\"),a=new Set([\"updateGamesJson"
+  },
+  {
+    "file": "170.bundle.js",
+    "character_offset": 242263,
+    "token": "new K.CoreClient",
+    "excerpt": "new K.CoreClient({appName:`${o.name}@${o.version}`,appDir:i,sentryEnabled:!t.get(\"privateMode\"),forcedAdapterConfig:{forceFallbackAdapter:t.get(\"forceFallbackAdapter\"),requestHighPerformance:t.get(\"requestHighPerformance\")},forcedGraphicsApi:parseForcedGraphicsApi(t.get(\"forcedGraphicsApi\")),appInstanceId:(0,F.S)(),...e}),Client.instance=logMethodCalls(\"client\",Client.instance,a),Client.instance}static async beforeShutdown(){const e=Client.instance,t=await e.getDevices();if(t.some(e=>e.status===K.DeviceStatus.UpdateInitializing||e.status===K.De"
+  },
+  {
+    "file": "170.bundle.js",
+    "character_offset": 271744,
+    "token": "static async renderLcdGraphic",
+    "excerpt": "static async renderLcdGraphic(e,t){return this.instance.lcd().renderGraphic(e,t)}static async startLcdStreaming(e,t,o){return this.instance.lcd().startLcdStreaming(e,t,o)}static st"
+  },
+  {
+    "file": "170.bundle.js",
+    "character_offset": 2891512,
+    "token": "function fromTripleInfographicsGraphic",
+    "excerpt": "function fromTripleInfographicsGraphic(e,t,o,i,a){const n=\"celsius\"===o?K.TemperatureFormat.Celsius:K.TemperatureFormat.Fahrenheit,r=e.deviceType===Ao.ZP.KRAKEN_ELITE||e.deviceType===Ao.ZP.KRAKEN_ELITE_V2?.05:1,l=(0,ea.aN)(e.deviceType),s=\"1\"===e.fwk?{fwk:\"Fwk1\",id:e.tempId}:{fwk:\"Fwk2\",device:e},createReadingConfig=e=>{const{reading:t,monitoringKey:o,text:i}=e;return{dataKey:o,readingConfig:{color:(0,le.QP)(t.color),...t.outline&&{outline:{color:(0,le.QP)(t.outline)}}},labelConfig:{color:(0,le.QP)(i.color),...i.outline&&{outline:{color:(0,le.QP)(i.outline)}}},labelTextTranslated:monitoringKeyMap(o),temperatureFormat:n,...o===K.MonitoringKey.CPUTemp&&{cpuTemperatureDisplay:a}}},d={reading1:createReadingConfig(t.reading1),reading2:createReadingConfig(t.reading2),reading3:createReadingConfig(t.reading3),logoConfig:t.enableLogo?{color:(0,le.QP)(t.logo.color),...t.logo.outline&&{outline:{color:(0,le.QP)(t.logo.outline)}}}:void 0,selectedGpuId:i,liquidTempSourceDeviceId:s};if(t.infographicMode===ta.m.TripleInfographicGif){const o=(0,I.n$)(h().join(\"images\",`black_media_default_${l}x${l}.gif`));let i=t.mediaPath?(0,I.oJ)(t.mediaPath,e.deviceType):o;return t.mediaPath&&g().existsSync(i)||(i=o),{graphicType:K.GraphicTypeDiscriminant.GifTripleInfographic,gifFilePath:i,infographicConfig:d}}return{graphicType:K.GraphicTypeDiscriminant.TripleInfographic,inactiveArcOpacity:r,backgroundColor:(0,le.QP)(t.backgroundColor),gradientStops:(0,le.x7)(cloneGradient(t.ringGradient)),infographicConfig:d}}const dL=\"Can't start kraken rendering due to fatal error.\";const cL=class LightingLCDDispatcher{constructor(e){L()(this,\"props\",void 0),L()(this,\"lcdRunner\",void 0),L()(this,\"newLCDDeviceReactionDisposer\",void 0),L()(this,\"toCoreLCDsDisposer\",void 0),L()(this,\"brightnessDisposer\",void 0),L()("
+  },
+  {
+    "file": "index.node",
+    "file_offset": "0x1dc9402",
+    "token": "wgpu-23.0.1",
+    "excerpt": "\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000\u000f\u0000\u0000\u0000C:\\Users\\CAM\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wgpu-23.0.1\\src\\api\\adapter.rs\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\ufffd\u0701\u0001\u0000\u0000\u0000`\u0000\u0000\u0000\u0000\u0000\u0000\u0000Q\u0000\u0000\u0000\t\u0000\u0000\u0000C:\\Users\\CAM\\.cargo\\registry\\"
+  },
+  {
+    "file": "index.node",
+    "file_offset": "0x1fbee42",
+    "token": "naga-23.0.0",
+    "excerpt": "\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\ufffd\u0016\ufffd\u0001\u0000\u0000\u0000C:\\Users\\CAM\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\naga-23.0.0\\src\\proc\\constant_evaluator.rs\u0000\u0000\u0000\u0000\u0000\u0002\ufffd\ufffd\u0001\u0000\u0000\u0000l\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0006\u0000\u0000J\u0000\u0000\u0000IndexSet: index out o"
+  },
+  {
+    "file": "index.node",
+    "file_offset": "0x1e22e63",
+    "token": "graphics\\triple_infographic.rs",
+    "excerpt": "\ufffd\u0001\u0000\u0000\u0000C:\\actions-runner\\backend\\_work\\cam-core\\cam-core\\crates\\lcd-rendering\\src\\graphics\\triple_infographic.rs\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0018B\ufffd\u0001\u0000\u0000\u0000i\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000K\u0000\u0000\u0000\u0018B\ufffd\u0001\u0000\u0000\u0000i\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000V\u0000\u0000\u0000\u0018B\ufffd\u0001\u0000\u0000\u0000i\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000V\u0000\u0000\u0000t"
+  },
+  {
+    "file": "index.node",
+    "file_offset": "0x1e230d3",
+    "token": "graphics\\single_infographic_arc.rs",
+    "excerpt": "\ufffd\u0001\u0000\u0000\u0000C:\\actions-runner\\backend\\_work\\cam-core\\cam-core\\crates\\lcd-rendering\\src\\graphics\\single_infographic_arc.rs\u0000\u0000\u0000\ufffdD\ufffd\u0001\u0000\u0000\u0000m\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000K\u0000\u0000\u0000\ufffdD\ufffd\u0001\u0000\u0000\u0000m\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000V\u0000\u0000\u0000\ufffdD\ufffd\u0001\u0000\u0000\u0000m\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000V\u0000\u0000\u0000singl"
+  },
+  {
+    "file": "index.node",
+    "file_offset": "0x1dc84cb",
+    "token": "kraken_rendering\\send_to_device.rs",
+    "excerpt": "\ufffd\u0001\u0000\u0000\u00008\ufffd\u0701\u0001\u0000\u0000\u0000`R\u0003\ufffd\u0001\u0000\u0000\u0000`\ufffd-\ufffd\u0001\u0000\u0000\u0000PI?\ufffd\u0001\u0000\u0000\u0000`R\u0003\ufffd\u0001\u0000\u0000\u0000\ufffd]\u0003\ufffd\u0001\u0000\u0000\u0000cam-core\\src\\lcd_rendering\\kraken_rendering\\send_to_device.rs\u0000\u0000\u0000\ufffd\ufffd\u0701\u0001\u0000\u0000\u0000=\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\u0000\u0000\u0000\t\u0000\u0000\u0000\ufffd\ufffd-\ufffd\u0001\u0000\u0000\u0000X\u0000\u0000\u0000\u0000\u0000\u0000\u0000\b\u0000\u0000\u0000\u0000\u0000\u0000\u0000\ufffd\ufffdr\ufffd\u0001\u0000\u0000\u0000\ufffd\ufffd-\ufffd\u0001\u0000\u0000\u0000X\u0000\u0000\u0000\u0000\u0000\u0000\u0000\b\u0000\u0000\u0000\u0000"
+  },
+  {
+    "file": "index.node",
+    "file_offset": "0x1e0ec9b",
+    "token": "Gotham-Bold",
+    "excerpt": "\u0000n4\u0000\u0000\u0000$hmtx\u0019^-N\u0000\u0000n\\\u0000\u0000\u0003\ufffdmaxp\u0000\ufffdP\u0000\u0000\u0000q\ufffd\u0000\u0000\u0000\u0006name\ufffdF\u0005\ufffd\u0000\u0000q\ufffd\u0000\u0000\u0002\ufffdpost\ufffd~\u0000\u0014\u0000\u0000u\u0014\u0000\u0000\u0000 \u0001\u0000\u0004\u0004\u0000\u0001\u0001\u0001\fGotham-Bold\u0000\u0001\u0002\u0000\u0001\u0000;\ufffd\u000f\u0000\ufffd\u001b\u0001\ufffd\u001c\u0002\ufffd\u001d\u0003\ufffd\u0014\u0004\ufffd\u0019\f\u0003\ufffd\f\u0004\u001d\u0000M\u0481\rD\ufffdA\u001c\u0004\ufffd\ufffd8\u0005\u001c\u0000\ufffd\u000f\u001c\u0000\u0000\u0010\u001c\u0002\ufffd\u0011\u001c\u0000,\u001d\u0000\u0000L\ufffd\u0012\u0000\n\u0002\u0000\u0001\u0000O\u0000Z\u0000`\u0000c\u0000e"
+  }
+]

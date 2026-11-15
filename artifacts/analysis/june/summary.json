@@ -1,0 +1,76 @@
+{
+  "packets": 274,
+  "duration": 10.193197965621948,
+  "frames": [
+    {
+      "packet": 23,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "3a9069f7c92be7391e48e793b67b05f60b4ccd689e72b54cd6a1889446f082ba"
+    },
+    {
+      "packet": 49,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "a87c346700967053db6c9e0d42900887168de83474c3917a8409f4ec6003b981"
+    },
+    {
+      "packet": 79,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "66f6582807f836eef6966825c46872a64432e1d749d67f5ce6bd3afef9d3ebad"
+    },
+    {
+      "packet": 101,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "66f6582807f836eef6966825c46872a64432e1d749d67f5ce6bd3afef9d3ebad"
+    },
+    {
+      "packet": 127,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "af02d97e7ff469f04319a34054912323af142aa5b6680362806c717a2d050703"
+    },
+    {
+      "packet": 157,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "af02d97e7ff469f04319a34054912323af142aa5b6680362806c717a2d050703"
+    },
+    {
+      "packet": 179,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "255fa60be30967032289c8edfef301fa0a7511a041e1f2699d8423bb37e78349"
+    },
+    {
+      "packet": 205,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "255fa60be30967032289c8edfef301fa0a7511a041e1f2699d8423bb37e78349"
+    },
+    {
+      "packet": 235,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "a3758b1502926052e0e5788b6a26bfe250ede7a02574cdaa51570ee715b4eac4"
+    },
+    {
+      "packet": 261,
+      "captured": 65508,
+      "declared": 1228800,
+      "sha256": "a3758b1502926052e0e5788b6a26bfe250ede7a02574cdaa51570ee715b4eac4"
+    }
+  ],
+  "commands": {
+    "72 02 01 01 64": 11,
+    "72 01 01 00 64": 11,
+    "36 01 00 01 09": 10,
+    "36 02 00 00 00": 10,
+    "26 14 01 01 6e": 1,
+    "26 14 01 01 6d": 1,
+    "26 14 01 01 6c": 4,
+    "26 14 01 01 6a": 4
+  }
+}

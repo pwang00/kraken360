@@ -1,0 +1,115 @@
+{
+  "asar_entries": 22884,
+  "selected_extracted": 342,
+  "native_module_sha256": "b8e82a10749ce330aa4276888f50762e9c6008471f21e6532dceb34b559dca3b",
+  "shaders": {
+    "audio_visualizer.wgsl": {
+      "offset": "0x1e1dc68",
+      "size": 4248,
+      "sha256": "89fcd45b2f67ca6f826936c900a845eaff9527a65502d5e8f4203400dbc9c1ed",
+      "balanced_braces": true
+    },
+    "clockface_analog.wgsl": {
+      "offset": "0x1e20910",
+      "size": 612,
+      "sha256": "debbf105d5454947b5d2d9e18845f2cae666914d293c97e82acbe99b844edc14",
+      "balanced_braces": true
+    },
+    "dual_infographic.wgsl": {
+      "offset": "0x1e21d78",
+      "size": 611,
+      "sha256": "5239e02c8b2a5257bee1e570396214dd9001ad4a5f0e2dd4cc5049ccdb122829",
+      "balanced_braces": true
+    },
+    "clockface_digital_background.wgsl": {
+      "offset": "0x1e2228e",
+      "size": 1212,
+      "sha256": "dc1c46d7391845e1b6a69a0636ed76675e8b1382b30e5d4910cdd4de471839ff",
+      "balanced_braces": true
+    },
+    "clockface_digital_background_hand.wgsl": {
+      "offset": "0x1e227b5",
+      "size": 1001,
+      "sha256": "748230ef8cc47a9942a7890ce1594294a39d75e4a5bdc9badbde08286e7d083b",
+      "balanced_braces": true
+    },
+    "clockface_digital_square.wgsl": {
+      "offset": "0x1e235c8",
+      "size": 1216,
+      "sha256": "dae2178691400fe769f84bf5c97703f9e25c13a0a066181536519886fd26bb88",
+      "balanced_braces": true
+    },
+    "single_infographic_square.wgsl": {
+      "offset": "0x1e23cf0",
+      "size": 1165,
+      "sha256": "816ca551f9f9f09c5df332ce630a2e4868f363202b4f5fe1dd567e9a6fe87a8d",
+      "balanced_braces": true
+    },
+    "single_infographic_full_fill.wgsl": {
+      "offset": "0x1e243c0",
+      "size": 1104,
+      "sha256": "14c61fe14563f7a336e120916b62863438ec6b04498100e517fa1525db7481c0",
+      "balanced_braces": true
+    },
+    "glyphon-text.wgsl": {
+      "offset": "0x1ef7bb8",
+      "size": 3480,
+      "sha256": "f15c5dbd2f60748f260cfcb918f66ef8d319e640ad32f35212d978833d2bf473",
+      "balanced_braces": true
+    },
+    "overlay_texture.wgsl": {
+      "offset": "0x1efac94",
+      "size": 1039,
+      "sha256": "8e5face0e1dc6958e8dbf0f6142ad97ada80fa33b4429629b50a6aa65fc434e2",
+      "balanced_braces": true
+    },
+    "image_rotation.wgsl": {
+      "offset": "0x1efb872",
+      "size": 1315,
+      "sha256": "261103defb6d81436b632c3632dd6c4ca74cce1e72c7e5bce490013aa1dce0c2",
+      "balanced_braces": true
+    },
+    "solid_color.wgsl": {
+      "offset": "0x1efbeb2",
+      "size": 585,
+      "sha256": "9fb6f51a81e7332dff72425caeb3f4286d07ac0ca7ca5a93f2805aaedb2c54d2",
+      "balanced_braces": true
+    },
+    "infographic_radial_gauge.wgsl": {
+      "offset": "0x1f2bff0",
+      "size": 1940,
+      "sha256": "dd2f345166b3b9cd258bd35def748128c2f7dac8cc512d52c050df1bc61e53fd",
+      "balanced_braces": true
+    },
+    "infographic_radial_gauge_indicator.wgsl": {
+      "offset": "0x1f2c7d0",
+      "size": 725,
+      "sha256": "4bdc0cd55c4c12cf7ece0fbd56f7f02d80a5ecf3e037477756f10d3a6cc1c90e",
+      "balanced_braces": true
+    }
+  },
+  "fonts": [
+    {
+      "file": "Gotham-Bold-01e0ebe6.otf",
+      "offset": "0x1e0ebe6",
+      "size": 30004,
+      "family": "Gotham",
+      "style": "Bold"
+    },
+    {
+      "file": "Gotham_Light-Regular-01e16148.otf",
+      "offset": "0x1e16148",
+      "size": 29648,
+      "family": "Gotham Light",
+      "style": "Regular"
+    },
+    {
+      "file": "Gotham-Bold-01f2cda0.otf",
+      "offset": "0x1f2cda0",
+      "size": 30004,
+      "family": "Gotham",
+      "style": "Bold"
+    }
+  ],
+  "note": "Shader boundaries are recovered heuristically; balanced braces are not compiler validation. Fonts were parsed with FreeType. Proprietary assets remain local."
+}

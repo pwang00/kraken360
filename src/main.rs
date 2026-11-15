@@ -47,7 +47,7 @@ enum Command {
     /// Send one already encoded Q565 file (experimental; header validation only).
     UploadQ565 {
         file: PathBuf,
-        #[arg(long, default_value = "artifacts/dashboard.lock")]
+        #[arg(long, default_value = "artifacts/runtime/dashboard.lock")]
         lock: PathBuf,
     },
 }
@@ -76,10 +76,10 @@ struct Options {
         default_value = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     )]
     font: PathBuf,
-    #[arg(long, default_value = "artifacts/rust-dashboard.png")]
+    #[arg(long, default_value = "artifacts/runtime/rust-dashboard.png")]
     output: PathBuf,
     /// Same lock path as the Python PoC to prevent concurrent controllers.
-    #[arg(long, default_value = "artifacts/dashboard.lock")]
+    #[arg(long, default_value = "artifacts/runtime/dashboard.lock")]
     lock: PathBuf,
 }
 

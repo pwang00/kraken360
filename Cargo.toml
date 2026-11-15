@@ -5,8 +5,8 @@ edition = "2024"
 rust-version = "1.88"
 description = "Linux temperature dashboard and USB LCD transport for NZXT Kraken Elite V2"
 license = "MIT"
-readme = "RUST.md"
-include = ["/src/**", "/tests/**", "/Cargo.toml", "/Cargo.lock", "/RUST.md", "/LICENSE"]
+readme = "README.md"
+include = ["/src/**", "/tests/**", "/Cargo.toml", "/Cargo.lock", "/README.md", "/Investigation.MD", "/LICENSE"]
 
 [dependencies]
 anyhow = "1"

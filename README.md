@@ -1,253 +1,140 @@
-# Kraken Elite V2 USB investigation
+# kraken360
 
-The Rust library and CLI are now available at the project root. See [Rust build and usage instructions](RUST.md). Run `cargo run --release -- run` for the live display.
+A Rust library and Linux CLI for displaying CPU, GPU, and coolant temperatures
+on the **NZXT Kraken Elite V2** (`1e71:3012`, 640×640 LCD).
 
-Device visible on this host: NZXT Kraken Elite V2, VID:PID **1e71:3012**,
-USB path `1-10.4`, USB 2 high speed (480 Mb/s). The capture device descriptor
-matches that identity and reports bcdDevice 0x0102 (not necessarily the complete firmware version).
+![CPU, liquid, GPU layout](artifacts/figures/linux/layout-clg-live.png)
 
-## Findings from export.pcapng
+The renderer runs on the CPU and sends RGB888 frames over USB. Vulkan, Python,
+and NZXT CAM are not required. It controls the LCD only; cooling profiles and
+RGB lighting are unchanged. For the USB protocol, captures, Q565 experiments,
+and recovered CAM rendering evidence, see [Investigation.MD](Investigation.MD).
 
-274 USBPcap records spanning 10.193198 seconds, ten LCD updates at approximately
-one update per second. All captured completions report success.
+## Requirements
 
-The configuration has two interfaces:
+- Rust 1.88+ and Cargo, a C compiler, and make. Vendored libusb is built by Cargo;
+  libusb development headers do not need a separate installation.
+- Linux hwmon CPU sensors: AMD `k10temp` Tctl or Intel `coretemp` Package id 0.
+- NVIDIA's `nvidia-smi` for GPU readings; GPU index 0 is the default.
+- A font, defaulting to Ubuntu's DejaVu Sans Bold, or a local TTF/OTF via `--font`.
+- USB access to the Kraken. The tested host already has suitable permissions;
+  elsewhere configure a device-specific udev rule, such as liquidctl's rules.
 
-| Interface | Type | Endpoints |
-| --- | --- | --- |
-| 0 | vendor-specific | bulk OUT 0x02, max packet 512 |
-| 1 | HID | interrupt OUT 0x01 and IN 0x81, max packet 512 |
-
-Each LCD update follows this sequence (interrupt commands are padded to 512 bytes):
-
-1. Interrupt OUT: `36 01 00 01 09`, followed by IN `37 01 ...`.
-2. Bulk OUT: 20-byte header `12 fa 01 e8 ab cd ef 98 76 54 32 10 09 00 00 00 00 c0 12 00`.
-3. Bulk OUT: 1,228,800 bytes of image data.
-4. Interrupt OUT: `36 02`, followed by IN `37 02 ...`.
-
-The header's last four bytes encode 1,228,800 as little-endian uint32.
-This is exactly **640 × 640 × 3**. Decoding the retained bytes as RGB888 shows
-a smooth pink arc against black. Thus this capture strongly supports raw RGB888
-mode 0x09, rather than Q565. Channel order and orientation still require a live
-color-pattern check. There are no mode 0x08 uploads in this capture, so it cannot
-establish a Q565 codec or its framing.
-
-The actual image bulk transfers take 59.41–59.85 ms, approximately 20.6 MB/s.
-That suggests a transport-only upper bound around 16.7 full frames/s; the capture
-only demonstrates CAM uploading at 1 Hz, not a tested display frame-rate limit.
-
-**Capture truncation:** each image URB declares 1,228,800 payload bytes but only
-65,508 payload bytes were saved (65,535-byte snaplen minus 27-byte USBPcap header).
-Only 5.33% of each frame survives: 34 complete RGB rows plus 228 bytes.
-These missing bytes are absent from the file, not deferred to later packets.
-`artifacts/*.rgb-prefix.png` shows only captured complete rows; it does not fill
-missing image data. Several prefixes repeat, but full-frame equality is unknown.
-
-Other traffic:
-
-- `72 02 01 01` and `72 01 01 00`, followed by 41 bytes of `64`, repeat at 1 Hz.
-  These resemble fan and pump curves with every duty set to 100%; interpretation
-  is supported by the installed liquidctl channel mapping, not isolated testing.
-- `26 14 01 01` followed by repeated RGB triplets looks like lighting updates.
-- Unsolicited `75 02` reports arrive at 1 Hz; `ff 01` reports acknowledge other
-  commands by echoing their first two bytes at offsets 14–15.
-- LCD `37 01` and `37 02` replies have byte 14 equal to 1 in this capture.
-
-## Tools
-
-Reproduce extraction (Pillow is optional for parsing, required for previews):
+## Build and use
 
 ```sh
-python3 scripts/analyze_capture.py export.pcapng
+cargo build --release
+./target/release/kraken360 preview
+./target/release/kraken360 run --frames 5
+./target/release/kraken360 run --layout clg
 ```
 
-Results: `artifacts/summary.json`, `transactions.jsonl`, ten partial binary
-payloads, and ten RGB prefix previews. The parser targets little-endian USBPcap
-pcapng with microsecond timestamps, as used by this file; it is not a general
-capture library.
+Stop any existing LCD service/controller before running `run`. Ctrl+C or SIGTERM
+releases the interfaces and restores detached kernel drivers. The last frame
+remains visible but stops updating. `preview` never opens USB and shows `--` for
+coolant. Failed or stale readings also show `--`.
 
-The experimental uploader mirrors the observed display sequence and does not
-replay fan, pump, or lighting commands:
+Options belong **after** `run` or `preview`:
 
 ```sh
-/usr/bin/python3 scripts/kraken_usb.py
-/usr/bin/python3 scripts/kraken_usb.py --status
-/usr/bin/python3 scripts/kraken_usb.py --test-pattern --dry-run artifacts/test-pattern.rgb
-/usr/bin/python3 scripts/kraken_usb.py --test-pattern
-/usr/bin/python3 scripts/kraken_usb.py --image picture.png
+kraken360 run --help
+kraken360 preview --layout clg --output artifacts/runtime/preview.png
+kraken360 run --layout cgl --interval 1 --gpu-index 0
+kraken360 run --cpu-sensor /sys/class/hwmon/hwmon3/temp1_input
 ```
 
-Ubuntu's system Python here already has PyUSB and Pillow. Elsewhere install
-`python3-usb python3-pil libusb-1.0-0`. The host must expose `/dev/bus/usb` and
-grant access to this device (e.g. liquidctl's udev rules). The script temporarily
-claims the necessary interfaces and restores detached kernel drivers afterward.
-It checks write lengths and captured LCD acknowledgement patterns. It is a
-single-frame experiment, not a complete cooler-control daemon.
+CPU sensor paths are normally discovered automatically; hwmon numbering may
+change after reboot. Readings use Celsius. Default refresh is once per second.
+The gauge follows the primary temperature on a 0–100°C scale. Rendering is an
+approximation of the captured CAM design, not a pixel-exact clone.
 
-## Validation and limitation
+## Temperature order
 
-The parser extracted all 274 records and ten truncated frames, agreeing with
-`capinfos`. The dry-run generated exactly 1,228,800 bytes and a header identical
-to CAM's. A live test was attempted, but libusb cannot initialize in this session:
-`/dev/bus/usb` and `/dev/hidraw*` are unavailable despite sysfs device visibility.
-**No commands reached the physical cooler; live uploader behavior is unverified.**
+`--layout` gives **large reading, upper-right, lower-right**. Values, labels, and
+the primary arc move together.
 
-For a new Windows capture, set USBPcap/Wireshark capture length to at least
-2 MiB (or unlimited), then verify caplen equals original length for image URBs.
-Capture known red/green/blue frames and, separately, any Q565 mode upload to
-resolve channel order and compression. On Linux usbmon, likewise check for
-truncation rather than assuming a large snaplen alone preserves the full URB.
+| Layout | Large | Upper-right | Lower-right |
+| --- | --- | --- | --- |
+| `gcl` (default) | GPU | CPU | Liquid |
+| `glc` | GPU | Liquid | CPU |
+| `cgl` | CPU | GPU | Liquid |
+| `clg` | CPU | Liquid | GPU |
+| `lgc` | Liquid | GPU | CPU |
+| `lcg` | Liquid | CPU | GPU |
 
-## Existing Linux work
+`--primary gpu` and `--primary cpu` remain aliases for `gcl` and `cgl`; do not
+combine them with `--layout`.
 
-The installed liquidctl already lists this VID:PID with a 640×640 screen.
-Its `_send_2023_data_fw2` uses the same bulk magic, but starts transfers in mode
-0x06, whereas every CAM upload here uses 0x09. Model recognition alone does not
-prove this particular LCD path works.
-
-Primary sources checked:
-- https://github.com/liquidctl/liquidctl/blob/main/liquidctl/driver/kraken3.py
-- https://github.com/liquidctl/liquidctl/issues/745
-- https://github.com/liquidctl/liquidctl/blob/main/extra/linux/71-liquidctl.rules
-
-## Follow-up: Q565 versus USB packet boundaries
-
-Q565 support and this RGB capture are compatible: AIOLCDUnchained's `driver.py`
-explicitly includes PID 0x3012 in its Q565 device list. Its `writeQ565` starts
-with `36 01 00 01 08`, uses 0x08 at bulk-header offset 12, then sends a
-length-delimited encoded frame and finishes with `36 02`. This is the same
-framing pattern observed here, with a different format selector (0x09 here).
-Source: https://github.com/brokenmass/AIOLCDUnchained/blob/main/driver.py
-
-Distinguish three boundaries: a screen frame, host USB transfers/URBs, and the
-individual USB bus packets making up each transfer. Large images certainly span
-many bus packets, and software can also split a frame across multiple writes.
-This particular file records whole host transfer requests, not individual bus
-packets: every image request declares 1,228,800 bytes, but its capture record
-retains only 65,508. Its completion contains no remaining image payload, and the
-next bulk submission is the next frame's 20-byte header. Joining these recorded
-prefixes therefore would join different frames, not restore missing data.
-A scan of all captured bytes found no ASCII `q565` magic; absence by itself is
-not decisive, but is consistent with the mode and RGB preview evidence.
-
-The user's decoder repository is now available locally in `rust-q565-decoder/`.
-Its `data/frame.q565` is a **10,586-byte** Q565 file: magic `q565`, followed by
-little-endian width/height 640×640. Its `out.png` is a 640×640 RGB image showing
-a white rounded diamond/ring logo shape on black (non-black bounds
-x=228..411, y=228..411). Neither the file nor its 8-byte header appears in the
-current capture. This establishes an earlier Q565 sample alongside the RGB
-uploads observed here, rather than contradicting either finding.
-
-The sample is about **116× smaller** than raw 640×640 RGB888. This ratio is
-specific to this mostly black logo; it does not predict animation frame rates.
-The Rust decoder calls `Q565DecodeContext::decode::<LittleEndian>` with RGB888
-output, then creates a PNG with the decoded dimensions. An offline Cargo run
-could not reproduce the PNG because the `q565` dependency is not cached.
-The existing PNG was inspected, not freshly generated. One CLI caveat: `main.rs`
-silently returns success if `decode_frame` returns an error, since it uses
-`if let Ok(...)` without an error branch.
-
-The experimental uploader now accepts a pre-encoded Q565 frame:
+## Install and run as a user service
 
 ```sh
-/usr/bin/python3 scripts/kraken_usb.py --q565 rust-q565-decoder/data/frame.q565 --dry-run artifacts/q565-upload.bin
-/usr/bin/python3 scripts/kraken_usb.py --q565 rust-q565-decoder/data/frame.q565
+install -Dm755 target/release/kraken360 "$HOME/.local/bin/kraken360"
+mkdir -p "$HOME/.config/systemd/user"
+cp systemd/kraken360.service "$HOME/.config/systemd/user/"
 ```
 
-The dry run preserves the sample byte-for-byte and produces this bulk header:
-`12 fa 01 e8 ab cd ef 98 76 54 32 10 08 00 00 00 5a 29 00 00`.
-It uses mode 0x08 in both the start command and bulk header. Input validation
-checks magic and dimensions; it does not decode or fully validate the compressed
-stream. Hardware behavior is still unverified because USB access is unavailable.
-
-## Hardware confirmation
-
-The user ran `/usr/bin/python3 scripts/kraken_usb.py --test-pattern` on the host
-and confirmed it transfers and renders correctly. This validates the raw RGB888
-mode 0x09 uploader on this device. Q565 mode 0x08 remains untested. Direct
-agent access is still blocked by unavailable device nodes in the sandbox.
-
-## Live temperature display
-
-`scripts/kraken_dashboard.py` renders a Windows CAM-like layout with a large
-GPU temperature, CPU and liquid temperatures beside it, and cyan/purple arcs.
-It uses the already verified raw RGB888 upload path, once per second by default.
-All generated files and logs stay under this project's `artifacts/` directory.
-No installation, startup service, cooling profile, or RGB lighting changes.
-
-Sources on this machine:
-
-- CPU: AMD `k10temp` **Tctl**, read from hwmon (automatically discovers its path).
-- GPU: **NVIDIA GeForce RTX 5070 Ti**, `nvidia-smi` temperature.gpu, GPU index 0.
-  This deliberately selects the discrete NVIDIA card, rather than the AMD iGPU.
-- Liquid: spontaneous Kraken USB `75 02` reports; byte 15 + byte 16 / 10 °C.
-  The same temperature byte interpretation appears in liquidctl's Kraken driver.
-
-Temperature values are rounded to whole °C on screen; logs retain precision.
-Windows CAM may choose a different CPU sensor or averaging window, so exact CPU
-numbers can differ. The arcs are decorative LCD graphics, not physical ring LED
-control or temperature gauges. GPU/CPU read failures display `--` and are logged;
-missing/stale liquid reports also display `--`. USB errors stop the program.
+Ensure `~/.local/bin` is on PATH. Before enabling the service, edit its
+`WorkingDirectory` to the absolute path of your checkout. The template matches
+this host's `~/Documents/reversing/kraken360` location and uses the system font.
 
 ```sh
-# Read live CPU/GPU sensors and generate a preview without touching USB:
-/usr/bin/python3 scripts/kraken_dashboard.py --preview
-
-# Run until Ctrl+C (no root needed on the tested host):
-/usr/bin/python3 scripts/kraken_dashboard.py
-
-# Finite hardware test:
-/usr/bin/python3 scripts/kraken_dashboard.py --frames 5
-
-# Optional sensor selections:
-/usr/bin/python3 scripts/kraken_dashboard.py --gpu-index 0 --interval 1
+systemctl --user daemon-reload
+systemctl --user enable --now kraken360
+systemctl --user status kraken360
+journalctl --user -u kraken360 -f
 ```
 
-Do not run the single-frame uploader, liquidctl LCD commands, or another LCD
-controller at the same time. An advisory project lock prevents two instances
-of this dashboard; it cannot coordinate unrelated USB clients. Exiting restores
-kernel drivers detached by the process and leaves the final image on the LCD.
-After exiting, displayed values stop updating.
+It starts at sign-in and restarts after failures. User lingering is not enabled
+on the tested host, so this is not a pre-login boot service.
 
-Validation: a five-update live test completed with every LCD acknowledgement
-accepted, reporting approximately CPU 51°C, GPU 38°C, and liquid 33.5–33.7°C.
-The generated preview was visually inspected. Checks also exercised missing CPU
-and timed-out GPU inputs, plus coolant report decoding. The image on the physical
-LCD has not been visually confirmed by the agent.
-
-A background instance started for this session writes `artifacts/dashboard.log`
-and its PID to `artifacts/dashboard.pid`. Stop it before running another instance:
+To set a persistent layout, run `systemctl --user edit --full kraken360`, change
+`--layout` in `ExecStart`, then reload and restart:
 
 ```sh
-kill "$(cat artifacts/dashboard.pid)"
+systemctl --user daemon-reload
+systemctl --user restart kraken360
+# Stop it before a foreground hardware experiment:
+systemctl --user stop kraken360
+# Disable startup and stop:
+systemctl --user disable --now kraken360
 ```
 
-It is not configured to start at login or boot. The latest uploaded frame is
-saved as `artifacts/dashboard-preview.png`.
+The current host's installed service retains its selected `cgl` layout and local
+Gotham font at `artifacts/local/cam-resources/embedded-fonts/`. The checked-in
+service does not require that font. Use the system font to run without local CAM
+resources. After rebuilding, stop the service, reinstall the binary, and start
+it again.
 
-## New complete Windows capture and executable
+## Files, experiments, and packaging
 
-An independent analysis of `windows_capture/inspection/cam-frames.pcapng` confirms
-15 complete RGB888 frames with the existing mode 0x09 framing, about 1 Hz, and no
-truncation. Every supplied frame binary and PNG was verified against its packet
-payload. Static analysis of `NZXT CAM.exe` confirms Electron runtime and Vulkan
-support strings, but does not establish the LCD rendering backend or recover a
-complete dashboard template. See [the detailed findings](artifacts/windows-analysis/FINDINGS.md)
-and [the change overlay](artifacts/windows-analysis/changes-overlay.png).
-Reproduce with `/usr/bin/python3 scripts/investigate_windows.py`.
+Runtime files use `artifacts/runtime/`: the latest PNG is `rust-dashboard.png`
+and the shared Python/Rust advisory lock is `dashboard.lock`. Run from the
+checkout root to share that lock with the Python PoC. Other controllers and
+clients choosing a different lock path do not participate in it.
 
-## CAM resource bundle investigation
+[The artifact index](artifacts/README.md) lists the retained captures, scripts,
+samples, and figures. Reproducible investigation steps live in
+[Investigation.MD](Investigation.MD). Bulk original exports, CAM binaries/assets,
+and old build caches are preserved under Git-ignored `artifacts/local/`.
 
-The new `all_files/` directory supplies the missing application archive and
-native core. The native `cam-core/dist/index.node` contains readable WGSL shaders,
-Gotham fonts and Rust LCD renderer paths. CAM's JS configuration defaults the
-native graphics API to Vulkan. Recovered the triple-reading configuration,
-5% inactive arc opacity on Elite models, and the actual radial-gauge shader.
-See [resource findings](artifacts/cam-resources/FINDINGS.md) and
-[extraction metadata](artifacts/cam-resources/extraction-report.json).
-Reproduce extraction with `/usr/bin/python3 scripts/extract_cam_resources.py`.
-The existing live dashboard code has not been changed by this investigation.
+Experimental upload of an already encoded Q565 frame:
 
-The Rust dashboard is now installed as `~/.local/bin/kraken360` with an enabled
-user systemd service. It runs now and starts at sign-in. See
-[service management instructions](RUST.md#installed-user-service).
+```sh
+kraken360 upload-q565 artifacts/samples/q565/frame.q565
+```
+
+This validates only the Q565 header/dimensions. Dashboard streaming currently
+uses RGB888; Q565 upload has not been hardware-validated in this investigation.
+
+```sh
+cargo fmt --all --check
+cargo test
+cargo clippy --all-targets -- -D warnings
+cargo package --allow-dirty  # omit --allow-dirty for a clean checkout
+```
+
+The Cargo package includes Rust source, tests, usage/investigation documentation,
+manifests/lockfile, and the MIT license. It excludes all artifacts, CAM assets,
+fonts, captures, Python scripts, and service files. Library modules separate
+`sensors`, `render`, `protocol`, and `usb`; the `Transport` trait supports mocked
+USB testing, and `DashboardRenderer::with_layout` selects a layout.
